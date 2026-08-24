@@ -50,7 +50,7 @@ The attack was simulated by repeatedly signing out of the AWS Management Console
 
 Wazuh's base rule 80254 ("AWS Cloudtrail: signin.amazonaws.com - ConsoleLogin - User login failed.") fired on each individual failed attempt, corresponding to a CloudTrail ConsoleLogin event with responseElements.ConsoleLogin: "Failure". Once five such failures against the same IAM user occurred within the 120-second window, custom correlation rule 100011 fired at severity level 10, generating a high-priority alert with MITRE ATT&CK technique T1110 (Brute Force) automatically tagged.
 
-[Screenshot: Wazuh Discover view showing rule.id:100011 firing at level 10]
+
 
 ### 2.2 Evidence Gathered
 
@@ -78,7 +78,7 @@ The event also confirmed MFA was not enabled on the targeted account (MFAUsed: N
 
 A notable technical finding during rule development: AWS CloudTrail records ConsoleLogin and other sign-in-related events exclusively in the us-east-1 region, regardless of which region the account or its resources are otherwise operating in. Initial verification attempts in the AWS Console's Event History (viewed under us-west-1) returned no results for this reason; switching the console's region to us-east-1 resolved this and confirmed the events had in fact been logged. This is a documented but easy-to-miss AWS behavior worth accounting for in any cloud log analysis workflow.
 
-[Screenshot: AWS CloudTrail Event History (us-east-1) showing the ConsoleLogin failure entries]
+
 
 An initial detection attempt also used CLI-based authentication failures (invalid AWS access key/secret pairs via the aws s3 ls command) rather than Console login failures. This approach did not generate usable CloudTrail entries tied to the account, because a wholly invalid/unrecognized Access Key ID does not allow AWS to attribute the failed request to a specific account in the first place. The detection strategy was revised to target Console sign-in failures specifically, which is also the better-documented and more realistic pattern for this type of detection in real-world SOC tooling.
 
