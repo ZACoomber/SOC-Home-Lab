@@ -74,7 +74,7 @@ Analyst response: the detection logic was redesigned to correlate on repeated fa
 
 This also surfaced a secondary technical finding: Wazuh's rule engine references dynamic fields internally without the `data.` prefix used in the indexed/display layer (e.g., `win.eventdata.targetUserName` rather than `data.win.eventdata.targetUserName`), which was the root cause of an initial non-firing rule during testing.
 
-[Screenshot: Wazuh Discover view showing rule.id:100010 firing at level 10]
+
 
 ## 3. Containment, Eradication & Recovery
 
